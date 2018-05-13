@@ -1,0 +1,34 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lidongze/jna/jni/graph/graph/edge.h
+
+/home/lidongze/jna/jni/graph/graph/graph.h
+vector
+-
+string
+-
+fstream
+-
+edge.h
+/home/lidongze/jna/jni/graph/graph/edge.h
+vertex.h
+/home/lidongze/jna/jni/graph/graph/vertex.h
+
+/home/lidongze/jna/jni/graph/graph/vertex.h
+
+/home/lidongze/jna/jni/graph/main.cc
+iostream
+-
+graph/edge.h
+/home/lidongze/jna/jni/graph/graph/edge.h
+graph/vertex.h
+/home/lidongze/jna/jni/graph/graph/vertex.h
+graph/graph.h
+/home/lidongze/jna/jni/graph/graph/graph.h
+
