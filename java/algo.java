@@ -38,7 +38,6 @@ public class algo {
     if (g == null) {
       System.out.println("null");
     } else {
-    } else {
       System.out.println(g.GetVerticesNum(g.getPtr()));
     }
   }
