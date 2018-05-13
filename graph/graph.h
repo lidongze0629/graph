@@ -4,9 +4,25 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <jni.h>
 
 #include "edge.h"
 #include "vertex.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/*
+ * Class:     graph
+ * Method:    GetVerticesNum
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_graph_GetVerticesNum
+        (JNIEnv *, jobject, jlong);
+
+#ifdef __cplusplus
+}
+#endif
 
 namespace grape {
     class Graph {

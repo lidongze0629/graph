@@ -21,8 +21,7 @@ namespace grape {
             vid_ = vid;
             data_ = data;
         }
-
-
+        
     private:
         inline const double &data() const { return data_; }
 
