@@ -1,1 +1,0 @@
-/usr/bin/c++    -std=c++11 -Wall -Werror  -fPIC -rdynamic CMakeFiles/graph-engine.dir/main.cc.o  -o graph-engine libgraph_core.so -Wl,-rpath,/home/lidongze/jna/jni/graph/build 

@@ -1,4 +1,0 @@
-/home/lidongze/jna/jni/graph/build/CMakeFiles/rebuild_cache.dir
-/home/lidongze/jna/jni/graph/build/CMakeFiles/graph-engine.dir
-/home/lidongze/jna/jni/graph/build/CMakeFiles/edit_cache.dir
-/home/lidongze/jna/jni/graph/build/CMakeFiles/graph_core.dir
