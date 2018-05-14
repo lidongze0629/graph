@@ -8,6 +8,7 @@
 
 #include "edge.h"
 #include "vertex.h"
+#include "Iterator_pair.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,6 +20,22 @@ extern "C" {
  */
 JNIEXPORT jint JNICALL Java_graph_GetVerticesNum
         (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     graph
+ * Method:    InnerVertices
+ * Signature: (J)LIteratorPair;
+ */
+JNIEXPORT jobject JNICALL Java_graph_InnerVertices
+        (JNIEnv *, jobject, jlong);
+
+/*
+ * Class:     graph
+ * Method:    SetAutoPResult
+ * Signature: (JJDZ)V
+ */
+JNIEXPORT void JNICALL Java_graph_SetAutoPResult
+(JNIEnv *, jobject, jlong, jlong, jdouble, jboolean);
 
 #ifdef __cplusplus
 }
@@ -32,6 +49,10 @@ namespace grape {
         ~Graph () {}
 
         inline int GetVerticesNum() const { return vertices_.size(); }
+
+        IteratorPair<std::vector<Vertex>::iterator> InnerVertices() {
+             return IteratorPair<std::vector<Vertex>::iterator>(vertices_.begin(), vertices_.end());
+        }
 
         inline const double &GetVertexData (int vid) {
             return vertices_[vid].vdata();
