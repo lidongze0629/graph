@@ -1,6 +1,8 @@
 #ifndef GRAPE_FRAGMENT_VERTEX_H_
 #define GRAPE_FRAGMENT_VERTEX_H_
 
+#include <iostream>
+
 namespace grape {
     class Vertex {
     public:
@@ -27,7 +29,15 @@ namespace grape {
 
         int vid_;
         double data_;
+
+        friend std::ostream &operator<< (std::ostream &out, const Vertex &v);
+        friend std::istream &operator>> (std::istream &in, const Vertex &v);
     };
+
+inline std::ostream &operator<< (std::ostream &out, const Vertex &v) {
+    out << v.vid() << "(" << v.vdata() << ")";
+    return out;
+}
 }
 
 #endif

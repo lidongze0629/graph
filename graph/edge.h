@@ -1,6 +1,8 @@
 #ifndef GRAPE_FRAGMENT_EDGE_H
 #define GRAPE_FRAGMENT_EDGE_H
 
+#include <iostream>
+
 namespace grape {
     class Edge {
     public:
@@ -37,7 +39,15 @@ namespace grape {
 
         int src_, dst_;
         double data_;
+
+        friend std::ostream &operator<< (std::ostream &out, const Edge &e);
+        friend std::istream &operator>> (std::istream &in, const Edge &e);
     };
+
+inline std::ostream &operator<< (std::ostream &out, const Edge &e) {
+    out << e.src() << "->" << e.dst() << "(" << e.edata() << ")";
+    return out;
+}
 }
 
 #endif

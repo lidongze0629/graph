@@ -47,35 +47,44 @@ JNIEXPORT jobject JNICALL Java_graph_InnerVertices
 JNIEXPORT void JNICALL Java_graph_SetAutoPResult
 (JNIEnv *env, jobject thisObj, jlong ptrAddr, jlong vertexPtrAddr, jdouble r, jboolean init) {
 
-    void *ptr = (void*)(uintptr_t)vertexPtrAddr;
-    Vertex *vptr = (Vertex *)ptr;
-    std::cout << vptr->vid() << std::endl;
+    //void *ptr = (void*)(uintptr_t)vertexPtrAddr;
+    //Vertex *vptr = (Vertex *)ptr;
+    //std::cout << vptr->vid() << std::endl;
 }
 
 int main(int argc, char *argv[]) {
 
     std::unique_ptr<Graph> g(new Graph);
-    g->LoadFromFile("../data/test.v", "../data/test.e");
 
-    IteratorPair<std::vector<Vertex>::iterator> inner_vertices = g->InnerVertices();
+    std::vector<Edge> edges;
+    std::vector<Vertex> vertices;
+    g->LoadFromFile (edges, vertices, "../data/twitter.v", "../data/twitter.e");
+    g->InitGraph (vertices, edges);
 
-    for (auto &v : inner_vertices) {
-        auto vbeginptr = &v;
-        //long l = (long)(uintptr_t)vbeginptr;
-        std::cout << "vforptr: " << vbeginptr << "," << (long)(uintptr_t)vbeginptr << " , " << v.vid()<<std::endl;
-        //oid *temp = (void*)(uintptr_t)l;
-        //Vertex *vv = (Vertex *)temp;
-        //std::cout << vv->vid() << std::endl;
-    }
 
-    auto beginaddr = inner_vertices.begin();
-    auto endaddr = inner_vertices.end();
-    std::cout << "baddr: " << &(*beginaddr)<<  ","<<(long)(uintptr_t)(&(*beginaddr))<<std::endl;
-    std::cout << "eaddr: " << &(*endaddr)  <<  ","<<(long)(uintptr_t)(&(*endaddr))<<std::endl;
+}
 
-    std::cout << "g address: " << g.get() << std::endl;
 
-    JavaVM *jvm = nullptr;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*JavaVM *jvm = nullptr;
     JNIEnv *env = nullptr;
 
     JavaVMOption options[1];
@@ -120,7 +129,4 @@ int main(int argc, char *argv[]) {
                 env-> CallObjectMethod(algoObj, getPtrID);
             }
         }
-    }
-
-
-}
+    }*/

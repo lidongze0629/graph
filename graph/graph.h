@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include <jni.h>
 
 #include "edge.h"
@@ -48,44 +49,53 @@ namespace grape {
 
         ~Graph () {}
 
-        inline int GetVerticesNum() const { return vertices_.size(); }
+        inline int GetVerticesNum() const { return vlist_.size(); }
 
         IteratorPair<std::vector<Vertex>::iterator> InnerVertices() {
-             return IteratorPair<std::vector<Vertex>::iterator>(vertices_.begin(), vertices_.end());
+             return IteratorPair<std::vector<Vertex>::iterator>(vlist_.begin(), vlist_.end());
         }
 
         inline const double &GetVertexData (int vid) {
-            return vertices_[vid].vdata();
+            return vlist_[vid].vdata();
         }
 
-        inline std::vector<Edge> &GetOutgoingEdges (int vid) { return oe_[vid]; }
-        inline std::vector<Edge> &GetIncomingEdges (int vid) { return ie_[vid]; }
-
-        inline bool HasParent (int vid) { return !ie_[vid].empty(); }
-        inline bool HasChild (int vid) { return !oe_[vid].empty(); }
-
-        void LoadFromFile (const std::string &vfile, const std::string &efile) {
-            Loadvfile(vfile);
-            Loadefile(efile);
+        inline void set_presult_on_vertex (std::vector<double> *presult) {
+            presult_on_vertex_ = presult;
         }
 
-        void Loadvfile (const std::string &vfile) {
+        inline void SetPResult (const Vertex &v, const double &r, bool init) {
+            presult_on_vertex_->at(v.vid()) = r;
+        }
+
+        inline void SetPResult (const Vertex &v, const double &r) {
+            presult_on_vertex_->at(v.vid()) = r;
+        }
+
+        inline void SetPResult (const int lid, const double &r) {
+            presult_on_vertex_->at(lid) = r;
+        }
+
+        void LoadFromFile (std::vector<Edge> &ecut_edge, std::vector<Vertex> &vertices,
+                           const std::string &vfile, const std::string &efile) {
+            Loadefile(efile, ecut_edge);
+            Loadvfile(vfile, vertices);
+        }
+
+        void Loadvfile (const std::string &vfile, std::vector<Vertex> &vertices) {
             std::cout << "Load vile \"" << vfile << "\""<< std::endl;
             std::string location = vfile;
             FILE *fin = fopen(location.c_str(), "r");
             if (!fin) { std::cout << "file " << location << " open failed!" << std::endl; }
 
-            int vid, vnum = 0;
+            int vid;
             double data;
             while (fscanf(fin, "%d%lg", &vid, &data) != EOF) {
-                vnum++;
-                vertices_.emplace_back(vid,data);
+                vertices.emplace_back(vid,data);
             }
-            ie_.resize(vnum), oe_.resize(vnum);
             fclose(fin);
         }
 
-        void Loadefile (const std::string &efile) {
+        void Loadefile (const std::string &efile, std::vector<Edge> &ecut_edge) {
             std::cout << "Load eile \"" << efile << "\""<< std::endl;
             std::string location = efile;
             FILE *fin = fopen(location.c_str(), "r");
@@ -94,14 +104,86 @@ namespace grape {
             int src, dst;
             double data;
             while (fscanf(fin, "%d%d%lg", &src, &dst, &data) != EOF) {
-                oe_[src].emplace_back(src, dst, data);
-                ie_[dst].emplace_back(src, dst, data);
+                ecut_edge.emplace_back(src, dst, data);
             }
+            fclose(fin);
+        }
+
+        void InitGraph (std::vector<Vertex> &vertices, std::vector<Edge> &ecut_edges) {
+            initVertices(vertices);
+            initEdges(ecut_edges);
         }
 
     private:
-        std::vector<Vertex> vertices_;
-        std::vector<std::vector<Edge>> ie_, oe_;
+        void initVertices (std::vector<Vertex> &vertices) {
+            tvnum_ = vertices.size();
+            vlist_.resize(tvnum_);
+            for (auto &v : vertices) {
+                int vid = v.vid();
+                vlist_[vid].SetInfo(vid, v.vdata());
+            }
+        }
+
+        void initEdges (std::vector<Edge> &edges) {
+            std::vector<int> oenum(tvnum_, 0);
+            std::vector<int> ienum(tvnum_, 0);
+
+            for (auto &e : edges) {
+                int u = e.src();
+                int v = e.dst();
+                oenum[u]++;
+                ienum[v]++;
+            }
+
+            oe_.resize(edges.size());
+            ie_.resize(edges.size());
+
+            ieoffset_.resize(tvnum_ + 1);
+            oeoffset_.resize(tvnum_ + 1);
+
+            ieoffset_[0] = 0;
+            oeoffset_[0] = 0;
+
+            for (int i = 0; i < tvnum_; i++) {
+                ieoffset_[i + 1] = ieoffset_[i] + ienum[i];
+                oeoffset_[i + 1] = oeoffset_[i] + oenum[i];
+            }
+
+            std::vector<std::vector<Edge>::iterator> ieiter(tvnum_), oeiter(tvnum_);
+
+            for (int i = 0; i < tvnum_; i++) {
+                ieiter[i] = ieoffset_[i] + ie_.begin();
+                oeiter[i] = oeoffset_[i] + oe_.begin();
+            }
+
+            for (auto &e : edges) {
+                int u = e.src();
+                int v = e.dst();
+
+                oeiter[u]->SetInfo(u, v, e.edata());
+                ieiter[v]->SetInfo(u, v, e.edata());
+
+                oeiter[u]++;
+                ieiter[v]++;
+            }
+
+            for (int i = 0; i < tvnum_; i++) {
+                std::sort(
+                    ie_.begin() + ieoffset_[i], ie_.begin() + ieoffset_[i + 1],
+                    [](const Edge &e1, const Edge &e2) { return e1.src() < e2.src();});
+                std::sort(
+                    oe_.begin() + oeoffset_[i], oe_.begin() + oeoffset_[i + 1],
+                    [](const Edge &e1, const Edge &e2) { return e1.dst() < e2.dst(); });
+            }
+        }
+
+        int ivnum_, ovnum_, tvnum_;
+        std::vector<Vertex> vlist_;
+
+        std::vector<Edge> ie_, oe_;
+        std::vector<int> ieoffset_, oeoffset_;
+
+        std::vector<double> *presult_on_vertex_;
     };
 }
 
