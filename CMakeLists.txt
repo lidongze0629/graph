@@ -21,13 +21,17 @@ else()
     set(JAVA_JVM_LIBRARY "")
 endif()
 
-file(GLOB_RECURSE CORE_SRC_FILES "*.cc")
+file(GLOB_RECURSE CORE_SRC_FILES "graph/*.cc")
 add_library(graph_core SHARED ${CORE_SRC_FILES})
 
 if (JNI_FOUND)
     target_link_libraries(graph_core ${JAVA_JVM_LIBRARY})
 endif()
 
-add_executable(graph-engine main.cc)
+add_executable(graph-engine jsssp.cc)
 target_link_libraries(graph-engine graph_core)
 set_target_properties(graph-engine PROPERTIES LINK_FLAGS "-fPIC -rdynamic")
+
+add_executable(sssp sssp.cc)
+target_link_libraries(sssp graph_core)
+set_target_properties(sssp PROPERTIES LINK_FLAGS "-fPIC -rdynamic")
