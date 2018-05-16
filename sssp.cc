@@ -92,19 +92,4 @@ int main(int argc, char **argv) {
 
     fout.close();
     std::cout << "result output: " << outputFile << std::endl;
-
-
-    /*auto es = g->GetOutgoingEdgesLid(2);
-    auto beginaddr = es.begin();
-    auto endaddr = es.end();
-    jlong vbegin = (jlong)(uintptr_t)(&(*beginaddr));
-    jlong vend = (jlong)(uintptr_t)(&(*endaddr));
-
-    std::cout << "sizeof(edge): " << sizeof(Edge) << std::endl;
-    std::cout << &(*beginaddr) << "," << &(*endaddr) << std::endl;
-    std::cout << vbegin << "," << vend << std::endl;
-
-    void* eptr = (void*)(uintptr_t)(vbegin+16);
-    Edge *eeptr = (Edge *)eptr;
-    std::cout << "edge: " << *eeptr << std::endl;*/
 }

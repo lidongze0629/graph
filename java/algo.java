@@ -1,3 +1,6 @@
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -79,6 +82,28 @@ public class algo extends IApp{
       }
     }
     System.out.println("/******* end sssp PEval *********/");
+  }
+
+  @Override
+  public void WriteToFile(graph g, String prefix) {
+
+    int tvnum = g.GetVerticesNum();
+
+    PrintWriter writer;
+
+    try {
+      writer = new PrintWriter(prefix, "UTF-8");
+      for (int i = 0; i < tvnum; i++) {
+        double result = g.GetPResult(i);
+        writer.println(i + "\t" + (int)result);
+      }
+      writer.flush();
+      writer.close();
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
+    }
   }
 
   public static void main (String[] args) {

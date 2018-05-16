@@ -83,30 +83,34 @@ int main(int argc, char **argv) {
     }
 
     /** call algo.PEval() function. */
+    std::string source = argv[1];
+    unsigned query = std::stoi(source);
+
     if (status == JNI_OK) {
         if (algo != 0) {
             if (algoObj == 0) { std::cout << "Create algo object failed." << std::endl; }
 
             jmethodID PEvalID = env->GetMethodID(algo, "PEval", "(Lgraph;J)V");
             if (PEvalID != 0) {
-                env->CallObjectMethod(algoObj, PEvalID, graphObj, 4);
+                jlong longquery = (jlong)query;
+                env->CallObjectMethod(algoObj, PEvalID, graphObj, longquery);
             }
         } else { std::cout << "Find Class algo Failed! "; }
     }
 
-    /** output result */
+    /** call algo.WriteToFile() function. */
     std::string outputFile = argv[2];
-    std::ofstream fout;
-    fout.open(outputFile);
 
-    auto inner_vertices = g->InnerVertices();
-    for (auto &v : inner_vertices) {
-        unsigned vid = v.vid();
-        const double result = g->GetPResult(v);
-        fout << vid << "\t" << result << "\n";
+    if (status == JNI_OK) {
+        if (algo != 0) {
+            if (algoObj == 0) { std::cout << "Create algo object failed." << std::endl; }
+
+            jmethodID WriteToFileID = env->GetMethodID(algo, "WriteToFile", "(Lgraph;Ljava/lang/String;)V");
+            if (WriteToFileID != 0) {
+                jstring prefix = env->NewStringUTF(outputFile.c_str());
+                env->CallObjectMethod(algoObj, WriteToFileID, graphObj, prefix);
+            }
+        } else { std::cout << "Find Class algo Failed! "; }
     }
-
-    fout.close();
-    std::cout << "result output: " << outputFile << std::endl;
 
 }

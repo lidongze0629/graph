@@ -13,6 +13,8 @@ public abstract class IApp {
 
   public abstract void PEval (graph g, long query);
 
+  public abstract void WriteToFile (graph g, String prefix);
+
   private graph g;
 
 }

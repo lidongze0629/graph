@@ -56,23 +56,23 @@ public class graph {
 
 
   /** native method **/
-  public native long GetVertexBylid (long ptr, long lid);
+  private native long GetVertexBylid (long ptr, long lid);
 
-  public native double GetPResult(long ptr, long lid);
+  private native double GetPResult(long ptr, long lid);
 
-  public native double GetData(long ptr, long eptr);
+  private native double GetData(long ptr, long eptr);
 
-  public native int GetVerticesNum(long ptr);
+  private native int GetVerticesNum(long ptr);
 
-  public native IteratorPair InnerVertices(long ptr);
+  private native IteratorPair InnerVertices(long ptr);
 
-  public native IteratorPair GetOutgoingEdgesLid(long ptr, long lid);
+  private native IteratorPair GetOutgoingEdgesLid(long ptr, long lid);
 
-  public native void SetPResult (long ptr, long vertexPtr, final double r, boolean init);
+  private native void SetPResult (long ptr, long vertexPtr, final double r, boolean init);
 
-  public native void SetPResult (long ptr, long lid, final double r);
+  private native void SetPResult (long ptr, long lid, final double r);
 
-  public native void SetAutoPResult (long ptr, long vertexPtr, final double r, boolean init);
+  private native void SetAutoPResult (long ptr, long vertexPtr, final double r, boolean init);
 
   private long ptr;
 
