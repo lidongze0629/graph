@@ -14,6 +14,31 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     graph
+ * Method:    GetVertexBylid
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_graph_GetVertexBylid
+        (JNIEnv *, jobject, jlong, jlong);
+
+/*
+ * Class:     graph
+ * Method:    GetPResult
+ * Signature: (JJ)D
+ */
+JNIEXPORT jdouble JNICALL Java_graph_GetPResult
+        (JNIEnv *, jobject, jlong, jlong);
+
+/*
+* Class:     graph
+* Method:    GetData
+* Signature: (JJ)D
+*/
+JNIEXPORT jdouble JNICALL Java_graph_GetData
+        (JNIEnv *, jobject, jlong, jlong);
+
 /*
  * Class:     graph
  * Method:    GetVerticesNum
@@ -32,11 +57,28 @@ JNIEXPORT jobject JNICALL Java_graph_InnerVertices
 
 /*
  * Class:     graph
- * Method:    SetAutoPResult
+ * Method:    SetPResult
  * Signature: (JJDZ)V
  */
-JNIEXPORT void JNICALL Java_graph_SetAutoPResult
+JNIEXPORT void JNICALL Java_graph_SetPResult__JJDZ
 (JNIEnv *, jobject, jlong, jlong, jdouble, jboolean);
+
+/*
+ * Class:     graph
+ * Method:    SetPResult
+ * Signature: (JJD)V
+ */
+JNIEXPORT void JNICALL Java_graph_SetPResult__JJD
+(JNIEnv *, jobject, jlong, jlong, jdouble);
+
+/*
+ * Class:     graph
+ * Method:    GetOutgoingEdgesLid
+ * Signature: (JJ)LIteratorPair;
+ */
+JNIEXPORT jobject JNICALL Java_graph_GetOutgoingEdgesLid
+        (JNIEnv *, jobject, jlong, jlong);
+
 
 #ifdef __cplusplus
 }
@@ -116,7 +158,7 @@ namespace grape {
             IMEItImpl *impl;
         };
 
-        inline int GetVerticesNum() const { return vlist_.size(); }
+        inline unsigned GetVerticesNum() const { return tvnum_; }
 
         IteratorPair<vertex_iterator> InnerVertices() {
              return IteratorPair<vertex_iterator >(vlist_.begin(), vlist_.end());

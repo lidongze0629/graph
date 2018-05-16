@@ -2,6 +2,22 @@
 #define GRAPE_FRAGMENT_EDGE_H
 
 #include <iostream>
+#include <jni.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+/*
+ * Class:     Edge
+ * Method:    dst
+ * Signature: (J)J
+ */
+JNIEXPORT jlong JNICALL Java_Edge_dst
+        (JNIEnv *, jclass, jlong);
+
+#ifdef __cplusplus
+}
+#endif
 
 namespace grape {
     class Edge {

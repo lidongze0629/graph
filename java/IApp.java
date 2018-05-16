@@ -11,8 +11,7 @@ public abstract class IApp {
 
   public abstract void Init (graph g);
 
-  public abstract void PEval (graph g, int query);
-
+  public abstract void PEval (graph g, long query);
 
   private graph g;
 
